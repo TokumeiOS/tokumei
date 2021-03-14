@@ -1,0 +1,55 @@
+#!/bin/bash
+echo "$0 Starting ..."
+errcnt=0
+
+# Process options passed on the boot command line
+for curopt in $(< /proc/cmdline)
+do
+    case "${curopt}" in
+      # Configure keyboard layout if requested in the boot command line
+      setkmap=*)
+          echo "Found option '${curopt}' on the boot command line"
+          localectl set-keymap ${curopt#*=}
+          ;;
+
+      # Configure root login shell if requested in the boot command line
+      rootshell=*)
+          echo "Found option '${curopt}' on the boot command line"
+          chsh --shell ${curopt#*=} root
+          ;;
+
+      # Set the system root password from a clear password
+      rootpass=*)
+          echo "Found option 'rootpass=******' on the boot command line"
+          if echo "root:${curopt#*=}" | chpasswd --crypt-method SHA512
+          then
+              echo "Password successfully changed"
+          else
+              echo "Failed to change password"
+              errcnt=$((errcnt + 1))
+          fi
+          ;;
+
+      # Set the system root password from an encrypted password
+      # A password can be encrypted using a one-line python3 command such as:
+      # python3 -c 'import crypt; print(crypt.crypt("MyPassWord123", crypt.mksalt(crypt.METHOD_SHA256)))'
+      rootcryptpass=*)
+          echo "Found option 'rootcryptpass=******' on the boot command line"
+          if echo "root:${curopt#*=}" | chpasswd --encrypted
+          then
+              echo "Password successfully changed"
+          else
+              echo "Failed to change password"
+              errcnt=$((errcnt + 1))
+          fi
+          ;;
+
+      # Option to allow user to disable the firewall
+      nofirewall)
+          echo "Found option 'nofirewall' on the boot command line"
+          systemctl disable --now iptables.service ip6tables.service
+          ;;
+    esac
+done
+
+exit ${errcnt}

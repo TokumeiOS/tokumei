@@ -1,0 +1,12 @@
+[Unit]
+Description=Tokumei Initialization
+Before=sshd.service getty-pre.target
+Wants=getty-pre.target
+
+[Service]
+Type=oneshot
+ExecStart=/etc/systemd/scripts/tokumei-initialize
+RemainAfterExit=true
+
+[Install]
+WantedBy=multi-user.target

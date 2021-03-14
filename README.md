@@ -8,7 +8,7 @@ This git repository contains Tokumei sources files. This is based on
 https://gitlab.archlinux.org/archlinux/archiso/
 
 ## Building Tokumei
-Tokumei can be built for x86_64 or i686 architectures. It must be built
+Tokumei can be built for x86_64 architectures. It must be built
 on archlinux if you want to build a 64bit edition, or archlinux32 if you want
 to create a 32bit edition. The following packages must be installed on the
 build system: archiso, grub, mtools, edk2-shell. You need to use a modified

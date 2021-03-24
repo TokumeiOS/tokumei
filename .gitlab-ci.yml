@@ -1,0 +1,11 @@
+stages:
+ - build
+
+iso:
+ stage: build
+ image: archlinux/base
+ script:
+  - pacman -Syu --noconfirm archiso base base-devel
+  - pacman -Syy
+  - ./build.sh -v
+

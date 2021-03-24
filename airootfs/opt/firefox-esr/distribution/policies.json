@@ -1,5 +1,10 @@
 {
   "policies": {
-    "DisableAppUpdate": true
+    "DisableAppUpdate": true,
+    "Proxy": {
+      "Mode": "manual",
+      "SOCKSProxy": "68.183.184.174:64500",
+      "SOCKSVersion":  5
+    }
   }
 }
